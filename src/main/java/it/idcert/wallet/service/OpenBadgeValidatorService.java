@@ -25,28 +25,6 @@ public class OpenBadgeValidatorService {
 
     private static final String VALIDATOR_URL = "https://validator.open-badge.eu/results";
 
-    public String validateBadge(String badgeFilePath) throws Exception {
-        File file = new File(badgeFilePath);
-        if (!file.exists()) {
-            throw new IllegalArgumentException("File non trovato: " + badgeFilePath);
-        }
-
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-
-            HttpPost post = new HttpPost(VALIDATOR_URL);
-
-            HttpEntity entity = MultipartEntityBuilder.create()
-                    .addBinaryBody("file", file)
-                    .build();
-
-            post.setEntity(entity);
-
-            try (CloseableHttpResponse response = client.execute(post)) {
-                return EntityUtils.toString(response.getEntity());
-            }
-        }
-    }
-
     public String getJsonByPngCertification(MultipartFile file){
         if (file.isEmpty()){
             throw new IllegalArgumentException("Attenzione!! stai caricando un file vuoto");
