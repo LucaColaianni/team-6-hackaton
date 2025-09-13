@@ -38,8 +38,8 @@ public class CertificationEntity {
     private String name;
     @Column(name = "description", length = 255, nullable = false)
     private String description;
-   // @Column(name = "release_date")
-   // private LocalDate releaseDate;
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
 
     public Long getId() {
         return id;

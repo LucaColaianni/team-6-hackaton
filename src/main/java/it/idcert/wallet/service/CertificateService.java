@@ -1,9 +1,12 @@
 package it.idcert.wallet.service;
 
+import it.idcert.wallet.dto.CertificationOverview;
 import it.idcert.wallet.dto.CertificationResponse;
 import it.idcert.wallet.dto.InsertCertificationRequest;
 import it.idcert.wallet.entity.CertificationEntity;
 import it.idcert.wallet.repository.CertificationRepository;
+import it.idcert.wallet.utils.HashUtils;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,41 +26,41 @@ public class CertificateService {
         this.fileService = fileService;
     }
 
-    public Long insertNewCertification(MultipartFile file, InsertCertificationRequest request) throws IOException {
+    public Long insertNewCertification(MultipartFile file, InsertCertificationRequest request) throws Exception {
         String openBadge = openBadgeValidatorService.getJsonByPngCertification(file);
-        //TODO chiamata per creare hash
-        String hash = "hash";
-        String blobIdPdf = "blobId";
+        String hash = HashUtils.sha256(openBadge);
+        String blobIdPdf = fileService.saveFile(file);
 
         CertificationEntity certificationEntity = new CertificationEntity();
         certificationEntity.setOpenBadgeJson(openBadge);
         certificationEntity.setHash(hash);
         certificationEntity.setIssuedAt(LocalDateTime.now());
         certificationEntity.setBlobIdPdf(blobIdPdf);
-
-        String blobIdPdf = fileService.saveFile(file);
-        CertificationEntity certificationEntity = CertificationEntity.builder()
-                .openBadgeJson(openBadge)
-                .hash(hash)
-                .issuedAt(LocalDateTime.now()).
-                blobIdPdf(blobIdPdf)
-                .name(request.getName())
-                .description(request.getDescription())
-                .releaseDate(request.getReleaseDate()).
-                build();
-
+        certificationEntity.setDescription(request.getDescription());
+        certificationEntity.setName(request.getName());
         return certificationRepository.save(certificationEntity).getId();
     }
 
-    public List<CertificationResponse> findAllCertification(){
+    public List<CertificationOverview> findAllCertification(){
 
-        List<CertificationEntity> certificationEntity = certificationRepository.findAll();
+        List<CertificationEntity> certificationEntityList = certificationRepository.findAll();
 
-        return null;
+
+        return certificationEntityList.stream().map(value -> {
+            try {
+                return new CertificationOverview(value.getId(),
+                        fileService.getFile(value.getBlobIdPdf()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
     }
 
-    public CertificationResponse findCertification(){
+    public CertificationResponse findCertification(Long id){
+        CertificationEntity certificationEntity = certificationRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Attenzione!! Non esiste la certificazione con id " + id));
 
+        //return new CertificationResponse(certificationEntity.getName(), certificationEntity.getDescription();
         return null;
     }
 }

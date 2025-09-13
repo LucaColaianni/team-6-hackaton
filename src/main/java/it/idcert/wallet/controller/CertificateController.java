@@ -1,5 +1,8 @@
 package it.idcert.wallet.controller;
 
+import it.idcert.wallet.dto.CertificationOverview;
+import it.idcert.wallet.dto.CertificationResponse;
+import it.idcert.wallet.dto.InsertCertificationRequest;
 import it.idcert.wallet.dto.NotarizationResponse;
 import it.idcert.wallet.service.BlockchainNotarizationService;
 import it.idcert.wallet.service.CertificateService;
@@ -12,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/validator")
+@RequestMapping("/certification")
 public class CertificateController {
 
     private final BlockchainNotarizationService notarizationService;
@@ -27,7 +32,7 @@ public class CertificateController {
     }
 
 
-    @GetMapping
+    @GetMapping("/insert")
     public ResponseEntity<Long> validate(@RequestParam("file") MultipartFile file, @RequestBody InsertCertificationRequest request) {
 
         try {
@@ -41,6 +46,16 @@ public class CertificateController {
     @GetMapping("/{id}")
     public NotarizationResponse notarize(@PathVariable("id") Long id) {
         return notarizationService.notarizeHash(id);
+    }
+
+    @GetMapping("/viewCertifications")
+    public ResponseEntity<List<CertificationOverview>> viewCertifications(){
+        return ResponseEntity.ok(certificateService.findAllCertification());
+    }
+
+    @GetMapping("/certificationsDetails/{id}")
+    public ResponseEntity<CertificationResponse> certificationDetails(@PathVariable Long id){
+        return ResponseEntity.ok(certificateService.findCertification(id));
     }
 
     @GetMapping("/test")
