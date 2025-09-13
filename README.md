@@ -1,4 +1,4 @@
-Questo progetto Spring Boot permette di:
+You are the one who holds the certifications in your hands.
 
 1. Validare certificazioni OpenBadge contenute in immagini PNG.
 2. Estrarre il JSON dalla certificazione.
