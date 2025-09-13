@@ -1,19 +1,19 @@
 package it.idcert.wallet.controller;
 
+import it.idcert.wallet.service.BlockchainNotarizationService;
 import it.idcert.wallet.service.OpenBadgeValidatorService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/validator")
 public class CertificateController {
 
+    private final BlockchainNotarizationService notarizationService;
     private final OpenBadgeValidatorService validatorService;
 
-    public CertificateController(OpenBadgeValidatorService validatorService) {
+    public CertificateController(BlockchainNotarizationService notarizationService, OpenBadgeValidatorService validatorService) {
+        this.notarizationService = notarizationService;
         this.validatorService = validatorService;
     }
 
@@ -27,6 +27,11 @@ public class CertificateController {
             e.printStackTrace();
             return "Errore nella validazione: " + e.getMessage();
         }
+    }
+
+    @GetMapping("/{id}")
+    public String notarize(@PathVariable("id") Long id) {
+        return notarizationService.notarizeHash(id);
     }
 
     @GetMapping("/test")

@@ -1,5 +1,6 @@
 package it.idcert.wallet.service;
 
+import it.idcert.wallet.utils.HashUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
@@ -31,6 +32,7 @@ public class OpenBadgeValidatorService {
         }
 
         try (CloseableHttpClient client = HttpClients.createDefault()) {
+
             HttpPost post = new HttpPost(VALIDATOR_URL);
 
             HttpEntity entity = MultipartEntityBuilder.create()
@@ -74,10 +76,10 @@ public class OpenBadgeValidatorService {
 
             try (CloseableHttpResponse response = client.execute(post)) {
                 return extractJsonFromHtml(EntityUtils.toString(response.getEntity()));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
