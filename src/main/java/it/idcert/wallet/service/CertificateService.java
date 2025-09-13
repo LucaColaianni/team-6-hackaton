@@ -26,7 +26,7 @@ public class CertificateService {
         this.fileService = fileService;
     }
 
-    public Long insertNewCertification(MultipartFile file, InsertCertificationRequest request) throws Exception {
+    public Long insertNewCertification(MultipartFile file) throws Exception {
         String openBadge = openBadgeValidatorService.getJsonByPngCertification(file);
         String hash = HashUtils.sha256(openBadge);
         String blobIdPdf = fileService.saveFile(file);
@@ -36,9 +36,17 @@ public class CertificateService {
         certificationEntity.setHash(hash);
         certificationEntity.setIssuedAt(LocalDateTime.now());
         certificationEntity.setBlobIdPdf(blobIdPdf);
-        certificationEntity.setDescription(request.getDescription());
-        certificationEntity.setName(request.getName());
         return certificationRepository.save(certificationEntity).getId();
+    }
+
+    public void insertTextData(InsertCertificationRequest request){
+        CertificationEntity entity = certificationRepository.findById(request.getId()).orElseThrow(()
+        -> new EntityNotFoundException("Attenzione!! Non esiste la certificazione con id " + request.getId()));
+
+        entity.setName(request.getName());
+        entity.setDescription(request.getDescription());
+        entity.setReleaseDate(request.getReleaseDate());
+        certificationRepository.save(entity);
     }
 
     public List<CertificationOverview> findAllCertification(){

@@ -32,15 +32,21 @@ public class CertificateController {
     }
 
 
-    @GetMapping("/insert")
-    public ResponseEntity<Long> validate(@RequestParam("file") MultipartFile file, @RequestBody InsertCertificationRequest request) {
+    @PostMapping("/insert")
+    public ResponseEntity<Long> insertCertification(@RequestParam("file") MultipartFile file) {
 
         try {
-            return ResponseEntity.ok(certificateService.insertNewCertification(file, request));
+            return ResponseEntity.ok(certificateService.insertNewCertification(file));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PutMapping("/insertTextData")
+    public ResponseEntity<Void> insertTextData(@RequestBody InsertCertificationRequest request){
+        certificateService.insertTextData(request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

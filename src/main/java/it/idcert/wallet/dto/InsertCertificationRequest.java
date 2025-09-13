@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class InsertCertificationRequest {
+    private Long id;
     private String name;
     private String description;
     private LocalDate releaseDate;
@@ -24,6 +25,10 @@ public class InsertCertificationRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public LocalDate getReleaseDate() {

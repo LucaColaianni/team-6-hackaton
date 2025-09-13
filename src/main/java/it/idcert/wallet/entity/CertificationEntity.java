@@ -34,9 +34,9 @@ public class CertificationEntity {
 
     @Column(name = "blockchain_tx_id", length = 100, unique = true)
     private String blockchainTxId;
-    @Column(name = "name", length = 255, nullable = false)
+    @Column(name = "name", length = 255)
     private String name;
-    @Column(name = "description", length = 255, nullable = false)
+    @Column(name = "description", length = 255)
     private String description;
     @Column(name = "release_date")
     private LocalDate releaseDate;
