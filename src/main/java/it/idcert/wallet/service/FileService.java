@@ -2,6 +2,7 @@ package it.idcert.wallet.service;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+@Service
 public class FileService {
     private final Path storageLocation = Paths.get("uploads");
 
