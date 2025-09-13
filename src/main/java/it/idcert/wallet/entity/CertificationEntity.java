@@ -23,7 +23,7 @@ public class CertificationEntity {
     @Column(name = "blob_id_pdf")
     private String blobIdPdf;
 
-    @Column(name = "openBadge_json", columnDefinition = "json", nullable = false)
+    @Column(name = "openbadge_json", columnDefinition = "json", nullable = false)
     private String openBadgeJson;
 
     @Column(name = "hash", length = 64, nullable = false)
@@ -38,6 +38,71 @@ public class CertificationEntity {
     private String name;
     @Column(name = "description", length = 255, nullable = false)
     private String description;
-    @Column(name = "release_date")
-    private LocalDate releaseDate;
+   // @Column(name = "release_date")
+   // private LocalDate releaseDate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getBlobIdPdf() {
+        return blobIdPdf;
+    }
+
+    public void setBlobIdPdf(String blobIdPdf) {
+        this.blobIdPdf = blobIdPdf;
+    }
+
+    public String getOpenBadgeJson() {
+        return openBadgeJson;
+    }
+
+    public void setOpenBadgeJson(String openBadgeJson) {
+        this.openBadgeJson = openBadgeJson;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public LocalDateTime getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(LocalDateTime issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
+    public String getBlockchainTxId() {
+        return blockchainTxId;
+    }
+
+    public void setBlockchainTxId(String blockchainTxId) {
+        this.blockchainTxId = blockchainTxId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }

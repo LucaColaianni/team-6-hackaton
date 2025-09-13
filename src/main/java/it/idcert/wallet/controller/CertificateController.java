@@ -1,5 +1,6 @@
 package it.idcert.wallet.controller;
 
+import it.idcert.wallet.dto.NotarizationResponse;
 import it.idcert.wallet.service.BlockchainNotarizationService;
 import it.idcert.wallet.service.CertificateService;
 import it.idcert.wallet.service.OpenBadgeValidatorService;
@@ -19,14 +20,11 @@ public class CertificateController {
     private final OpenBadgeValidatorService validatorService;
     private final CertificateService certificateService;
 
-    public CertificateController(BlockchainNotarizationService notarizationService, OpenBadgeValidatorService validatorService) {
+    public CertificateController(BlockchainNotarizationService notarizationService, OpenBadgeValidatorService validatorService, CertificateService certificateService) {
         this.notarizationService = notarizationService;
         this.validatorService = validatorService;
-    public CertificateController(CertificateService certificateService) {
-
         this.certificateService = certificateService;
     }
-
 
     @GetMapping
     public ResponseEntity<Long> validate(@RequestParam("file") MultipartFile file) {
@@ -40,7 +38,7 @@ public class CertificateController {
     }
 
     @GetMapping("/{id}")
-    public String notarize(@PathVariable("id") Long id) {
+    public NotarizationResponse notarize(@PathVariable("id") Long id) {
         return notarizationService.notarizeHash(id);
     }
 

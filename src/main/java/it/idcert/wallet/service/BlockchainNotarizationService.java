@@ -1,6 +1,7 @@
 package it.idcert.wallet.service;
 
 
+import it.idcert.wallet.dto.NotarizationResponse;
 import it.idcert.wallet.entity.CertificationEntity;
 import it.idcert.wallet.repository.CertificateRepository;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -23,41 +24,20 @@ import org.apache.hc.core5.http.ContentType;
 public class BlockchainNotarizationService {
 
     private final CertificateRepository certificateRepository;
-    private static final String WITNESSCHAIN_URL = "https://api.witnesschain.com/v1/timestamp";
 
     public BlockchainNotarizationService(CertificateRepository certificateRepository) {
         this.certificateRepository = certificateRepository;
     }
 
-    public String notarizeHash(Long certificateId) {
-        // Recupero certificazione dal DB
+    public NotarizationResponse notarizeHash(Long certificateId) {
         CertificationEntity certificationEntity = certificateRepository.findById(certificateId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Certificazione con ID " + certificateId + " non trovata"));
 
         String certificateHash = certificationEntity.getHash();
 
-        // HttpClient 5.x
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            HttpPost post = new HttpPost(WITNESSCHAIN_URL);
-            post.setHeader("Content-Type", "application/json");
-
-            // Payload JSON
-            String jsonPayload = "{ \"hash\": \"" + certificateHash + "\" }";
-            post.setEntity(new StringEntity(jsonPayload, ContentType.APPLICATION_JSON));
-
-            try (CloseableHttpResponse response = client.execute(post)) {
-                int statusCode = response.getCode(); // HttpClient 5.x
-                String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-
-                if (statusCode >= 200 && statusCode < 300) {
-                    return responseBody; // ✅ ritorno la proof
-                } else {
-                    throw new RuntimeException("Request fallita con status: " + statusCode + " e body: " + responseBody);
-                }
-            }
-        } catch (IOException | ParseException e) {
-            throw new RuntimeException("Errore durante la notarizzazione", e);
-        }
+        // Mock della response
+        String mockProof = "mock-blockchain-proof-" + certificateHash.substring(0, 8);
+        return new NotarizationResponse(certificateHash, true, mockProof);
     }
 }
