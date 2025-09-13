@@ -41,6 +41,14 @@ public class CertificationEntity {
     @Column(name = "release_date")
     private LocalDate releaseDate;
 
+    public LocalDate getReleaseDate(){
+        return this.releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate){
+        this.releaseDate = releaseDate;
+    }
+
     public Long getId() {
         return id;
     }
@@ -104,5 +112,7 @@ public class CertificationEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 
 }

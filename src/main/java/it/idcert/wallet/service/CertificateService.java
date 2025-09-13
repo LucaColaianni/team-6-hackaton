@@ -60,7 +60,6 @@ public class CertificateService {
         CertificationEntity certificationEntity = certificationRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Attenzione!! Non esiste la certificazione con id " + id));
 
-        //return new CertificationResponse(certificationEntity.getName(), certificationEntity.getDescription();
-        return null;
+        return new CertificationResponse(certificationEntity.getName(), certificationEntity.getDescription(), certificationEntity.getReleaseDate());
     }
 }
